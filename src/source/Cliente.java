@@ -30,4 +30,5 @@ public class Cliente extends Thread
 	public void setConsultas(Mensaje[] consultas) {
 		this.consultas = consultas;
 	}
+	
 }

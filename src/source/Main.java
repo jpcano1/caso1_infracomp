@@ -18,18 +18,18 @@ public class Main
 			FileReader fr = new FileReader(new File(archivoDatos));
 			BufferedReader br = new BufferedReader(fr);
 			
-			String NClientes = br.readLine().split(":")[2];
-			int  numeroClientes = Integer.parseInt(NClientes);
+			String nClientes = br.readLine().split(":")[1];
+			int  numeroClientes = Integer.parseInt(nClientes);
 			
-			String NServidores = br.readLine().split(":")[2];
-			int numeroServidores = Integer.parseInt(NServidores);
+			String nServidores = br.readLine().split(":")[1];
+			int numeroServidores = Integer.parseInt(nServidores);
 			
 
-			String Cclientes = br.readLine().split(":")[2];
-			int consultaClientes = Integer.parseInt(Cclientes);
+			String cClientes = br.readLine().split(":")[1];
+			int consultaClientes = Integer.parseInt(cClientes);
 			
-			String TBuffer = br.readLine().split(":")[2];
-			int TamanioBuffer = Integer.parseInt(TBuffer);
+			String tBuffer = br.readLine().split(":")[1];
+			int tamanioBuffer = Integer.parseInt(tBuffer);
 		
 			
 		} catch (IOException e) {
