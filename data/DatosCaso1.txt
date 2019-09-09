@@ -1,0 +1,5 @@
+NumeroClientes:10
+NumeroServidores:5
+ConsultasPorCliente:3
+Tama–oBuffer:5
+

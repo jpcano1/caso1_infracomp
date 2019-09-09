@@ -16,4 +16,16 @@ public class Servidor extends Thread
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+	public void leerMensaje()
+	{
+		Mensaje leyendo = Main.buffer.soltarMensaje();
+		leyendo.setMensaje(leyendo.getMensaje()+10);
+		leyendo.getCliente().notify();
+	}
+	public void run()
+	{
+		
+	}
 }
+

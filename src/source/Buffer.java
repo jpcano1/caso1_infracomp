@@ -1,15 +1,18 @@
 package source;
 
+import java.util.ArrayList;
+
 public class Buffer 
 {
 	private int capacidad;
-	
-	private Mensaje[] mensajes;
-	
+
+	private ArrayList<Mensaje> mensajes;
+
 	public Buffer(int pCapacidad)
 	{
 		capacidad = pCapacidad;
-		mensajes = new Mensaje[pCapacidad];
+		mensajes =  new ArrayList<Mensaje>();
+
 	}
 
 	public int getCapacidad() 
@@ -22,24 +25,50 @@ public class Buffer
 		this.capacidad = capacidad;
 	}
 
-	public Mensaje[] getMensajes() 
+	public ArrayList<Mensaje> getMensajes() 
 	{
 		return mensajes;
 	}
 
-	public void setMensajes(Mensaje[] mensajes)
+	public void setMensajes(ArrayList<Mensaje> mensajes)
 	{
 		this.mensajes = mensajes;
 	}
-	
-	public void guardarMensaje()
+
+	public  synchronized  void guardarMensaje(Mensaje mensaje)
 	{
-		
+		try
+		{
+			while(mensajes.size()>=capacidad)
+			{
+
+				mensaje.getCliente().wait();
+			}
+			mensajes.add(mensaje);
+			notify();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public synchronized Mensaje soltarMensaje()
+	{
+		try 
+		{
+			while(mensajes.isEmpty())
+			{	
+				wait();
+			}
+			
+		} 
+		catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return mensajes.remove(0);
 	}
 	
-	public void soltarMensaje()
-	{
-		
-	}
 	
+
 }
