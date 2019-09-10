@@ -31,4 +31,9 @@ public class Cliente extends Thread
 		this.consultas = consultas;
 	}
 	
+	public void EscribirMensaje()
+	{
+		
+	}
+	
 }

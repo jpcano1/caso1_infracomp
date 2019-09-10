@@ -25,5 +25,14 @@ public class Mensaje
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
+
+	public void esperarRespuesta() {
+		try {
+			cliente.wait();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 }

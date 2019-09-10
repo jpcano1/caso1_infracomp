@@ -26,17 +26,20 @@ public class Main
 			int numeroServidores = Integer.parseInt(nServidores);
 			Servidor[] servidores = new Servidor[numeroServidores];
 
-			String cClientes = br.readLine().split(":")[1];
-			int nConsultaClientes = Integer.parseInt(cClientes);
 
 			String tBuffer = br.readLine().split(":")[1];
 			int tamanioBuffer = Integer.parseInt(tBuffer);
 
-			for(int i = 0; i < numeroClientes; i++)
-			{
-				clientes[i] = new Cliente((i+1)*1000, nConsultaClientes);
+			buffer = new Buffer(tamanioBuffer);
+			String linea= br.readLine() ;
+			
+			while(linea !=null)
+			{	
+				int numCliente = Integer.valueOf(linea.split(":")[1]);
+				clientes[numCliente-1] = new Cliente((numCliente+1)*1000, Integer.valueOf(linea.split(":")[2]));
+				linea = br.readLine();
 			}
-
+			
 			for(int i = 0; i < numeroServidores; i++)
 			{
 				servidores[i] = new Servidor((i+1)*100);

@@ -45,6 +45,7 @@ public class Buffer
 				mensaje.getCliente().wait();
 			}
 			mensajes.add(mensaje);
+			mensaje.esperarRespuesta();
 			notify();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
