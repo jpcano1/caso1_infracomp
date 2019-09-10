@@ -7,12 +7,22 @@ public class Buffer
 	private int capacidad;
 
 	private ArrayList<Mensaje> mensajes;
+	
+	private int cont;
+	
+	public int getCont() {
+		return cont;
+	}
 
-	public Buffer(int pCapacidad)
+	public void setCont(int cont) {
+		this.cont = cont;
+	}
+
+	public Buffer(int pCapacidad, int pNumero)
 	{
 		capacidad = pCapacidad;
 		mensajes =  new ArrayList<Mensaje>();
-
+		cont = pNumero;
 	}
 
 	public int getCapacidad() 
@@ -42,12 +52,10 @@ public class Buffer
 			{
 				while(mensajes.size()>=capacidad)
 				{
-
 					mensaje.getCliente().wait();
 				}
 				mensajes.add(mensaje);
-
-
+				
 				mensaje.esperarRespuesta();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -65,7 +73,7 @@ public class Buffer
 				{	
 					sever.yield();
 				}
-
+				cont--;
 			
 			return mensajes.remove(0);
 		}
