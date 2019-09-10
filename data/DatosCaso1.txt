@@ -1,7 +1,4 @@
-NumeroClientes:3
-NumeroServidores:5
-TamanioBuffer:5
+NumeroClientes:1
+NumeroServidores:1
+TamanioBuffer:2
 ConsultasCliente:1:2
-ConsultasCliente:2:3
-ConsultasCliente:3:6
-

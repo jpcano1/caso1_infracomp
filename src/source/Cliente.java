@@ -31,9 +31,25 @@ public class Cliente extends Thread
 		this.consultas = consultas;
 	}
 	
-	public void EscribirMensaje()
+	public void EscribirMensajes()
 	{
-		
+		for (int i = 0; i < consultas.length; i++) {
+			consultas[i] = new Mensaje(id+(i+1), this);
+		}
 	}
 	
+	public void enviarMensaje(Mensaje mensaje)
+	{
+		Main.buffer.guardarMensaje(mensaje);
+	}
+	
+	public void run()
+	{
+		EscribirMensajes();
+		for (Mensaje mensaje : consultas) 
+		{
+			enviarMensaje(mensaje);
+		}
+	}
+	 
 }
