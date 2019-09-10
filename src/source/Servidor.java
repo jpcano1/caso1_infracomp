@@ -19,13 +19,15 @@ public class Servidor extends Thread
 
 	public void leerMensaje()
 	{
-	Mensaje leyendo = Main.buffer.soltarMensaje();
-		leyendo.setMensaje(leyendo.getMensaje()+10);
+		Mensaje leyendo = Main.buffer.soltarMensaje(this);
+		leyendo.setMensaje(leyendo.getMensaje()+id);
+		System.out.println(leyendo.getMensaje());
 		leyendo.confirmarRespuesta();
 	}
 	public void run()
 	{
-		leerMensaje();	
+		while(true)
+			leerMensaje();	
 	}
 }
 

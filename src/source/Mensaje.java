@@ -26,17 +26,29 @@ public class Mensaje
 		this.cliente = cliente;
 	}
 
-	public synchronized void esperarRespuesta() {
-		try {
-			cliente.wait();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+	public  void esperarRespuesta() 
+	{
+
+		synchronized(cliente)
+		{
+			try 
+			{
+				cliente.wait();
+			} catch (InterruptedException e) 
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 
-	public synchronized void confirmarRespuesta() {
-		cliente.notify();
-		
+	public  void confirmarRespuesta() 
+	{
+		synchronized(cliente)
+		{
+			cliente.notify();
+
+		}
+
 	}
-	
+
 }

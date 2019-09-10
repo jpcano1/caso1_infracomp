@@ -35,41 +35,42 @@ public class Buffer
 		this.mensajes = mensajes;
 	}
 
-	public  synchronized  void guardarMensaje(Mensaje mensaje)
+	public void guardarMensaje(Mensaje mensaje)
 	{
-		try
-		{
-			while(mensajes.size()>=capacidad)
+		synchronized(mensaje.getCliente()) {
+			try
 			{
+				while(mensajes.size()>=capacidad)
+				{
 
-				mensaje.getCliente().wait();
+					mensaje.getCliente().wait();
+				}
+				mensajes.add(mensaje);
+
+
+				mensaje.esperarRespuesta();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			mensajes.add(mensaje);
-			mensaje.esperarRespuesta();
-			notify();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 
-	public synchronized Mensaje soltarMensaje()
+	public  Mensaje soltarMensaje(Servidor sever)
 	{
-		try 
+		synchronized(sever) 
 		{
-			while(mensajes.isEmpty())
-			{	
-				wait();
-			}
 			
-		} 
-		catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				while(mensajes.isEmpty())
+				{	
+					sever.yield();
+				}
+
+			
+			return mensajes.remove(0);
 		}
-		return mensajes.remove(0);
 	}
-	
-	
+
+
 
 }

@@ -46,9 +46,10 @@ public class Cliente extends Thread
 	public void run()
 	{
 		EscribirMensajes();
-		for (Mensaje mensaje : consultas) 
+		for (int i = 0; i < consultas.length; i++)
 		{
-			enviarMensaje(mensaje);
+			System.err.println(consultas[i].getMensaje());
+			enviarMensaje(consultas[i]);
 		}
 	}
 	 
