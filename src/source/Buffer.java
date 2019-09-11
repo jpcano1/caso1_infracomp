@@ -1,6 +1,7 @@
 package source;
 
 import java.util.ArrayList;
+import java.util.Queue;
 
 /**
  * 
@@ -12,7 +13,7 @@ public class Buffer
 	//---------------------------
 	// Atributos
 	//--------------------------
-	
+
 	/**
 	 * Capacidad de buffer
 	 */
@@ -22,21 +23,26 @@ public class Buffer
 	 * Lista de mensajes
 	 */
 	private ArrayList<Mensaje> mensajes;
-	
+
 	/**
 	 * Contador de mensajes
 	 */
 	private int cont;
-	
+
+	private Object lleno;
+
+	private Object vacio;
+
 	//---------------------------
 	// Metodos
 	//---------------------------
-	
+
 	/**
 	 * Obtiene el contador de mensajes
 	 * @return el contador
 	 */
-	public int getCont() {
+	public int getCont()
+	{
 		return cont;
 	}
 
@@ -44,10 +50,11 @@ public class Buffer
 	 * Actualiza el contador
 	 * @param cont
 	 */
-	public void setCont(int cont) {
+	public void setCont(int cont) 
+	{
 		this.cont = cont;
 	}
-	
+
 	//--------------------------
 	// Constructores
 	//--------------------------
@@ -63,7 +70,7 @@ public class Buffer
 		mensajes =  new ArrayList<Mensaje>();
 		cont = pNumero;
 	}
-	
+
 	/**
 	 * Obtiene la capacidad del buffer
 	 * @return la capacidad
@@ -81,7 +88,7 @@ public class Buffer
 	{
 		this.capacidad = capacidad;
 	}
-	
+
 	/**
 	 * Obtener la lista de mensajes.
 	 * @return
@@ -90,7 +97,7 @@ public class Buffer
 	{
 		return mensajes;
 	}
-	
+
 	/**
 	 * Actualiza la lista de mensajes
 	 * @param mensajes
@@ -100,40 +107,63 @@ public class Buffer
 		this.mensajes = mensajes;
 	}
 
+	/**
+	 * 
+	 * @param mensaje
+	 */
 	public void guardarMensaje(Mensaje mensaje)
 	{
-		synchronized(mensaje.getCliente()) {
+		synchronized(lleno) {
 			try
 			{
-				while(mensajes.size()>=capacidad)
+				while(mensajes.size()==capacidad)
 				{
-					mensaje.getCliente().wait();
+					// Este wait pone en espera a los que entraron a la sección crítica
+					lleno.wait();
 				}
-				mensajes.add(mensaje);
-				
-				mensaje.esperarRespuesta();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+
+			}
+			catch (InterruptedException e)
+			{
 				e.printStackTrace();
 			}
 		}
-	}
-
-	public  Mensaje soltarMensaje(Servidor sever)
-	{
-		synchronized(sever) 
+		synchronized (this) 
 		{
-			
-				while(mensajes.isEmpty())
-				{	
-					sever.yield();
-				}
-				cont--;
-			
-			return mensajes.remove(0);
+			mensajes.add(mensaje);
+			mensaje.dormir();
+		}
+		synchronized (vacio)
+		{
+			vacio.notify();
 		}
 	}
 
-
-
+	public  Mensaje soltarMensaje()
+	{
+		synchronized(vacio) 
+		{
+			while(mensajes.isEmpty())
+			{
+				try {
+					vacio.wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		Mensaje i;
+		synchronized (this) 
+		{
+			cont--;
+			i = mensajes.remove(0);
+		}
+		
+		synchronized (lleno) {
+			lleno.notify();
+		}
+		
+		return i;
+	}
 }

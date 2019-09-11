@@ -25,6 +25,21 @@ public class Mensaje
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
+	
+	public void dormir()
+	{
+		try {
+			this.wait();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void despertar()
+	{
+		this.notify();
+	}
 
 	public  void esperarRespuesta() 
 	{
@@ -46,9 +61,6 @@ public class Mensaje
 		synchronized(cliente)
 		{
 			cliente.notify();
-
 		}
-
 	}
-
 }

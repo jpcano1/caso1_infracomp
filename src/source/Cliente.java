@@ -5,11 +5,14 @@ public class Cliente extends Thread
 	private int id;
 	
 	private Mensaje[] consultas;
+	
+	private Buffer buffer;
 
-	public Cliente(int pId, int numeroConsultas)
+	public Cliente(int pId, int numeroConsultas, Buffer pBuffer)
 	{
 		id = pId;
 		consultas = new Mensaje[numeroConsultas];
+		buffer = pBuffer;
 	}
 
 	public int darId() 
@@ -40,7 +43,7 @@ public class Cliente extends Thread
 	
 	public void enviarMensaje(Mensaje mensaje)
 	{
-		Main.buffer.guardarMensaje(mensaje);
+		buffer.guardarMensaje(mensaje);
 	}
 	
 	public void run()
