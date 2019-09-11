@@ -33,24 +33,31 @@ public class Main
 			String linea= br.readLine() ;
 			
 			int mensajes = 0;
-			while(linea !=null)
-			{	
-				int numCliente = Integer.valueOf(linea.split(":")[1]);
-				clientes[numCliente-1] = new Cliente((numCliente)*1000, Integer.valueOf(linea.split(":")[2]));
-				clientes[numCliente-1].start();
-				linea = br.readLine();
-				mensajes += Integer.valueOf(linea.split(":")[2]);
-			}
 			
 			buffer = new Buffer(tamanioBuffer, mensajes);
-			br.close();
-			fr.close();
 			
+			
+
 			for(int i = 0; i < numeroServidores; i++)
 			{
 				servidores[i] = new Servidor((i+1)*100);
 				servidores[i].start();
 			}
+			
+			
+			while(linea !=null)
+			{	
+				int numCliente = Integer.valueOf(linea.split(":")[1]);
+				clientes[numCliente-1] = new Cliente((numCliente)*1000, Integer.valueOf(linea.split(":")[2]));
+				clientes[numCliente-1].start();
+				mensajes += Integer.valueOf(linea.split(":")[2]);
+				linea = br.readLine();
+			
+			}
+			
+			
+			br.close();
+			fr.close();
 			
 			
 		

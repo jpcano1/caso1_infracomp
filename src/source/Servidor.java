@@ -26,7 +26,7 @@ public class Servidor extends Thread
 	}
 	public void run()
 	{
-		while(Main.buffer.getCont() != 0)
+		while(true)
 			leerMensaje();	
 	}
 }
