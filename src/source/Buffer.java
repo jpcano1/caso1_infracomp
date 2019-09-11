@@ -1,7 +1,6 @@
 package source;
 
 import java.util.ArrayList;
-import java.util.Queue;
 
 /**
  * 
@@ -22,17 +21,15 @@ public class Buffer
 	/**
 	 * Lista de mensajes
 	 */
-	private ArrayList<Mensaje> mensajes;
+	private Queue<Mensaje> mensajes;
 
 	/**
 	 * Contador de mensajes
 	 */
 	private int cont;
 
-	private Object lleno;
-
-	private Object vacio;
-
+	private Object lleno, vacio;
+	
 	//---------------------------
 	// Metodos
 	//---------------------------
@@ -67,8 +64,10 @@ public class Buffer
 	public Buffer(int pCapacidad, int pNumero)
 	{
 		capacidad = pCapacidad;
-		mensajes =  new ArrayList<Mensaje>();
+		mensajes = new Queue<Mensaje>();
 		cont = pNumero;
+		lleno = new Object();
+		vacio = new Object();
 	}
 
 	/**
@@ -93,7 +92,7 @@ public class Buffer
 	 * Obtener la lista de mensajes.
 	 * @return
 	 */
-	public ArrayList<Mensaje> getMensajes() 
+	public Queue<Mensaje> getMensajes() 
 	{
 		return mensajes;
 	}
@@ -102,7 +101,7 @@ public class Buffer
 	 * Actualiza la lista de mensajes
 	 * @param mensajes
 	 */
-	public void setMensajes(ArrayList<Mensaje> mensajes)
+	public void setMensajes(Queue<Mensaje> mensajes)
 	{
 		this.mensajes = mensajes;
 	}
@@ -114,23 +113,22 @@ public class Buffer
 	public void guardarMensaje(Mensaje mensaje)
 	{
 		synchronized(lleno) {
-			try
+			while(mensajes.size()==capacidad)
 			{
-				while(mensajes.size()==capacidad)
+				// Este wait pone en espera a los que entraron a la sección crítica
+				try
 				{
-					// Este wait pone en espera a los que entraron a la sección crítica
 					lleno.wait();
 				}
-
-			}
-			catch (InterruptedException e)
-			{
-				e.printStackTrace();
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
 			}
 		}
 		synchronized (this) 
 		{
-			mensajes.add(mensaje);
+			mensajes.enqueue(mensaje);
 			mensaje.dormir();
 		}
 		synchronized (vacio)
@@ -145,10 +143,12 @@ public class Buffer
 		{
 			while(mensajes.isEmpty())
 			{
-				try {
+				try
+				{
 					vacio.wait();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+				} 
+				catch (InterruptedException e)
+				{
 					e.printStackTrace();
 				}
 			}
@@ -157,13 +157,11 @@ public class Buffer
 		synchronized (this) 
 		{
 			cont--;
-			i = mensajes.remove(0);
+			i = mensajes.dequeue();
 		}
-		
 		synchronized (lleno) {
 			lleno.notify();
 		}
-		
 		return i;
 	}
 }
