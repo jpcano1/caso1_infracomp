@@ -18,53 +18,54 @@ public class Main
 			FileReader fr = new FileReader(new File(archivoDatos));
 			BufferedReader br = new BufferedReader(fr);
 
-			String nClientes = br.readLine().split(":")[1];
-			int  numeroClientes = Integer.parseInt(nClientes);
+			int  numeroClientes = Integer.parseInt(br.readLine().split(":")[1]);
 			Cliente[] clientes = new Cliente[numeroClientes];
+			
+			System.out.println("El número de clientes es: " + numeroClientes);
 
-			String nServidores = br.readLine().split(":")[1];
-			int numeroServidores = Integer.parseInt(nServidores);
+			int numeroServidores = Integer.parseInt(br.readLine().split(":")[1]);
 			Servidor[] servidores = new Servidor[numeroServidores];
+			
+			System.out.println("El numero de servidores es: " + numeroServidores);
 
-
-			String tBuffer = br.readLine().split(":")[1];
-			int tamanioBuffer = Integer.parseInt(tBuffer);
+			int tamanioBuffer = Integer.parseInt(br.readLine().split(":")[1]);
 			
-			String linea= br.readLine() ;
+			System.out.println("El tamaño del buffer es: " + tamanioBuffer);
 			
-			int mensajes = 0;
+			buffer = new Buffer(tamanioBuffer, numeroClientes);
 			
-			buffer = new Buffer(tamanioBuffer, mensajes);
-			
-			
-
 			for(int i = 0; i < numeroServidores; i++)
 			{
-				servidores[i] = new Servidor((i+1)*100);
-				servidores[i].start();
+				servidores[i] = new Servidor((i+1)*100, buffer);
 			}
 			
+			for(int i = 0; i < numeroServidores; i++)
+			{
+				servidores[i].start();
+				System.out.println("Servidor: " + (i+1) + " iniciado. ");
+			}
+			
+			String linea= br.readLine();
 			
 			while(linea !=null)
 			{	
-				int numCliente = Integer.valueOf(linea.split(":")[1]);
-				clientes[numCliente-1] = new Cliente((numCliente)*1000, Integer.valueOf(linea.split(":")[2]));
-				clientes[numCliente-1].start();
-				mensajes += Integer.valueOf(linea.split(":")[2]);
+				int numeroCliente = Integer.parseInt(linea.split(":")[1]);
+				clientes[numeroCliente-1] = new Cliente((numeroCliente)*1000, Integer.valueOf(linea.split(":")[2]), buffer);
+				System.out.println("El número del cliente creado es:  " + numeroCliente);
 				linea = br.readLine();
-			
 			}
 			
-			
+			for(int i = 0; i < numeroClientes; i++)
+			{
+				clientes[i].start();
+				System.out.println("Cliente " + (i+1) + " iniciado.");
+			}
 			br.close();
 			fr.close();
-			
-			
-		
 		} 
-		catch (IOException e) 
+		catch (Exception e) 
 		{
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
 	}
 }

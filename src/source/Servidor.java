@@ -3,7 +3,7 @@ package source;
 public class Servidor extends Thread
 {
 	private int id;
-	
+
 	private Buffer buffer;
 
 	public Servidor(int pId, Buffer pBuffer)
@@ -23,15 +23,22 @@ public class Servidor extends Thread
 	public void leerMensaje()
 	{
 		Mensaje leyendo = buffer.soltarMensaje();
-		leyendo.setMensaje(leyendo.getMensaje()+id);
-		System.out.println(leyendo.getMensaje());
-		leyendo.confirmarRespuesta();
+		System.out.println("Mensaje leido: " + leyendo.getMensaje() + " por servidor: " + id);
+		leyendo.setMensaje(leyendo.getMensaje() + 1);
+		leyendo.despertar();
+		System.out.println("Mensaje enviado: " + leyendo.getMensaje() + " por servidor: " + id);
 	}
-	
+
 	public void run()
 	{
-		while(true)
+		while(buffer.getCont() > 0)
+		{
+//			if(buffer.getMensajes().isEmpty())
+//			{
+//				yield();
+//			}
 			leerMensaje();
+		}
 	}
 }
 

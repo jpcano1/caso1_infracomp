@@ -2,6 +2,11 @@ package source;
 
 import java.util.Iterator;
 
+/**
+ * 
+ * @author Juan Pablo Cano y Andrés González
+ *
+ */
 public class Queue<T>
 {
 	@SuppressWarnings("hiding")
@@ -38,48 +43,68 @@ public class Queue<T>
 		}
 	}
 
-	///////////////////////////////////////////
+	//--------------------------------------
 	//Attributes
-	///////////////////////////////////////////
+	//--------------------------------------
 	private Node<T> head;
 
 	private Node<T> tail;
 
 	private int size;
 
-	///////////////////////////////////////////
+	//--------------------------------------
 	//Constructors
-	///////////////////////////////////////////
+	//--------------------------------------
 	public Queue()
 	{
 		head = tail = null;
 		size = 0;
 	}
 
-	///////////////////////////////////////////
+	//--------------------------------------
 	//Methods
-	///////////////////////////////////////////
-
+	//--------------------------------------
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isEmpty()
 	{
 		return size == 0;
 	}
-	
+		
+	/**
+	 * 
+	 * @return
+	 */
 	public Node<T> getHead()
 	{
 		return head;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public Node<T> getTail()
 	{
 		return tail;
 	}
-
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public int size()
 	{
 		return size;
 	}
 
+	/**
+	 * 
+	 * @param t
+	 */
 	public void enqueue(T t)
 	{
 		Node<T> nuevo = new Node<T>(t);
@@ -96,6 +121,10 @@ public class Queue<T>
 		}
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public Iterator<T> iterator()
 	{
 		return new Iterator<T>()
@@ -122,6 +151,10 @@ public class Queue<T>
 		};
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public T dequeue()
 	{
 		Node<T> eliminado = head;

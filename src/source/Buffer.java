@@ -1,7 +1,5 @@
 package source;
 
-import java.util.ArrayList;
-
 /**
  * 
  * @author Juan Pablo Cano y Andres Gonzalez
@@ -24,12 +22,34 @@ public class Buffer
 	private Queue<Mensaje> mensajes;
 
 	/**
-	 * Contador de mensajes
+	 * Contador de clientes
 	 */
-	private int cont;
+	private int numClientes;
 
+	/**
+	 * Son lo objectos sobre los cuales se implementa el 
+	 * semaforo
+	 */
 	private Object lleno, vacio;
-	
+
+	//--------------------------
+	// Constructores
+	//--------------------------
+
+	/**
+	 * Clase constructora
+	 * @param pCapacidad capacidad del buffer
+	 * @param pNumeroClientes numero de clientes totales
+	 */
+	public Buffer(int pCapacidad, int pNumeroClientes)
+	{
+		capacidad = pCapacidad;
+		mensajes = new Queue<Mensaje>();
+		numClientes = pNumeroClientes;
+		lleno = new Object();
+		vacio = new Object();
+	}
+
 	//---------------------------
 	// Metodos
 	//---------------------------
@@ -40,7 +60,7 @@ public class Buffer
 	 */
 	public int getCont()
 	{
-		return cont;
+		return numClientes;
 	}
 
 	/**
@@ -49,25 +69,7 @@ public class Buffer
 	 */
 	public void setCont(int cont) 
 	{
-		this.cont = cont;
-	}
-
-	//--------------------------
-	// Constructores
-	//--------------------------
-
-	/**
-	 * Clase constructora
-	 * @param pCapacidad
-	 * @param pNumero
-	 */
-	public Buffer(int pCapacidad, int pNumero)
-	{
-		capacidad = pCapacidad;
-		mensajes = new Queue<Mensaje>();
-		cont = pNumero;
-		lleno = new Object();
-		vacio = new Object();
+		this.numClientes = cont;
 	}
 
 	/**
@@ -89,8 +91,8 @@ public class Buffer
 	}
 
 	/**
-	 * Obtener la lista de mensajes.
-	 * @return
+	 * Obtener la cola de mensajes.
+	 * @return la cola de mensajes
 	 */
 	public Queue<Mensaje> getMensajes() 
 	{
@@ -98,8 +100,8 @@ public class Buffer
 	}
 
 	/**
-	 * Actualiza la lista de mensajes
-	 * @param mensajes
+	 * Actualiza la cola de mensajes
+	 * @param mensajes la cola de mensajes
 	 */
 	public void setMensajes(Queue<Mensaje> mensajes)
 	{
@@ -107,22 +109,23 @@ public class Buffer
 	}
 
 	/**
-	 * 
-	 * @param mensaje
+	 * Método que guarda un mensaje en el buffer,
+	 * se esta implementando un semaforo
+	 * @param mensaje el mensaje a almacenar
 	 */
 	public void guardarMensaje(Mensaje mensaje)
 	{
 		synchronized(lleno) {
-			while(mensajes.size()==capacidad)
+			while(mensajes.size() == capacidad)
 			{
-				// Este wait pone en espera a los que entraron a la sección crítica
+				// Este wait pone en espera al objeto usado en la seccion critica
 				try
 				{
 					lleno.wait();
 				}
-				catch (InterruptedException e)
+				catch (Exception e)
 				{
-					e.printStackTrace();
+					System.out.println("Este es el error: " + (e.getMessage() != null? e.getMessage(): e));
 				}
 			}
 		}
@@ -137,6 +140,10 @@ public class Buffer
 		}
 	}
 
+	/**
+	 * Retorna el primer mensaje de la cola mientras no este vacio
+	 * @return un mensaje que representa el primero de la cola
+	 */
 	public  Mensaje soltarMensaje()
 	{
 		synchronized(vacio) 
@@ -147,17 +154,17 @@ public class Buffer
 				{
 					vacio.wait();
 				} 
-				catch (InterruptedException e)
+				catch (Exception e)
 				{
-					e.printStackTrace();
+					System.out.println("Este es el error: " + (e.getMessage() != null? e.getMessage(): e) + " en el buffer");
 				}
 			}
 		}
 		Mensaje i;
 		synchronized (this) 
 		{
-			cont--;
 			i = mensajes.dequeue();
+			if(i.getCliente().getConsultas().length == 0) numClientes--;
 		}
 		synchronized (lleno) {
 			lleno.notify();
