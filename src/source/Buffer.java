@@ -129,15 +129,13 @@ public class Buffer
 				}
 			}
 		}
-		synchronized (this) 
-		{
-			mensajes.enqueue(mensaje);
-			mensaje.dormir();
-		}
 		synchronized (vacio)
 		{
+		mensajes.enqueue(mensaje);
 			vacio.notify();
 		}
+		mensaje.dormir();
+
 	}
 
 	/**

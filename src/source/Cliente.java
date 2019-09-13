@@ -108,5 +108,6 @@ public class Cliente extends Thread
 		{
 			enviarMensaje(mensajes[i]);
 		}
+		System.err.print("acabe Att: " + id );
 	}
 }
