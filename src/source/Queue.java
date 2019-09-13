@@ -122,11 +122,11 @@ public class Queue<T>
 
 	/**
 	 * Un iterador simple en la cola
-	 * @return un iterador.
+	 * @return un iterador simple.
 	 */
 	public Iterator<T> iterator()
 	{
-		return new Iterator<>()
+		return new Iterator<T>()
 		{
 			Node<T> actual = head;
 

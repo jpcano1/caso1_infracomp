@@ -10,7 +10,15 @@ public class Mensaje
 	//---------------------
 	// Atributos
 	//---------------------
+
+	/**
+	 * Contenido del mensaje
+	 */
 	private int mensaje;
+
+	/**
+	 * Cliente que envia el mensaje
+	 */
 	private Cliente cliente;
 
 	//---------------------
@@ -18,9 +26,9 @@ public class Mensaje
 	//---------------------
 	
 	/**
-	 * 
-	 * @param pMensaje
-	 * @param pCliente
+	 * Constructor
+	 * @param pMensaje Contenido del mensaje
+	 * @param pCliente Cliente de donde proviene el mensaje
 	 */
 	public Mensaje(int pMensaje, Cliente pCliente)
 	{
@@ -33,8 +41,8 @@ public class Mensaje
 	//---------------------
 
 	/**
-	 * 
-	 * @return
+	 * Retorna el contenido del mensaje
+	 * @return El mensaje
 	 */
 	public int getMensaje() 
 	{
@@ -42,8 +50,8 @@ public class Mensaje
 	}
 
 	/**
-	 * 
-	 * @param mensaje
+	 * Actualiza el contenido del mensaje
+	 * @param mensaje el mensaje que sera actualizado
 	 */
 	public void setMensaje(int mensaje) 
 	{
@@ -51,8 +59,8 @@ public class Mensaje
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Retorna el cliente que envio el mensaje
+	 * @return El cliente
 	 */
 	public Cliente getCliente() 
 	{
@@ -60,8 +68,8 @@ public class Mensaje
 	}
 
 	/**
-	 * 
-	 * @param cliente
+	 * Actualiza el cliente del mensaje
+	 * @param cliente el cliente que se actualizara
 	 */
 	public void setCliente(Cliente cliente) 
 	{
@@ -69,7 +77,7 @@ public class Mensaje
 	}
 
 	/**
-	 * 
+	 * Metodo que duerme el mensaje
 	 */
 	public synchronized void dormir()
 	{
@@ -85,7 +93,7 @@ public class Mensaje
 	}
 	
 	/**
-	 * 
+	 * Metodo que despierta el mensaje
 	 */
 	public synchronized void despertar()
 	{
