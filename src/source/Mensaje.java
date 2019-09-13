@@ -75,7 +75,7 @@ public class Mensaje
 	{
 		try
 		{
-			System.out.println("El mensaje: " + mensaje + " est� en espera.");
+			System.out.println("\nEl mensaje: " + mensaje + " est� en espera.\n");
 			wait();
 		}
 		catch (Exception e)
@@ -89,30 +89,7 @@ public class Mensaje
 	 */
 	public synchronized void despertar()
 	{
-		System.out.println("El mensaje: " + mensaje + " despert�");
+		System.out.println("\nEl mensaje: " + mensaje + " desperto\n");
 		notify();
 	}
-
-	//	public  void esperarRespuesta() 
-	//	{
-	//
-	//		synchronized(cliente)
-	//		{
-	//			try 
-	//			{
-	//				cliente.wait();
-	//			} catch (Exception e) 
-	//			{
-	//				System.err.println(e.getMessage());
-	//			}
-	//		}
-	//	}
-
-	//	public  void confirmarRespuesta()
-	//	{
-	//		synchronized(cliente)
-	//		{
-	//			cliente.notify();
-	//		}
-	//	}
 }

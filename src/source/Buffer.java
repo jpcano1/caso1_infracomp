@@ -1,11 +1,11 @@
 package source;
 
 /**
- * 
+ *
  * @author Juan Pablo Cano y Andres Gonzalez
  *
  */
-public class Buffer 
+public class Buffer
 {
 	//---------------------------
 	// Atributos
@@ -67,7 +67,7 @@ public class Buffer
 	 * Actualiza el contador
 	 * @param cont
 	 */
-	public void setCont(int cont) 
+	public void setCont(int cont)
 	{
 		this.numClientes = cont;
 	}
@@ -76,16 +76,16 @@ public class Buffer
 	 * Obtiene la capacidad del buffer
 	 * @return la capacidad
 	 */
-	public int getCapacidad() 
+	public int getCapacidad()
 	{
 		return capacidad;
 	}
 
 	/**
 	 * Actualiza la capacidad del buffer
-	 * @param capacidad 
+	 * @param capacidad
 	 */
-	public void setCapacidad(int capacidad) 
+	public void setCapacidad(int capacidad)
 	{
 		this.capacidad = capacidad;
 	}
@@ -94,7 +94,7 @@ public class Buffer
 	 * Obtener la cola de mensajes.
 	 * @return la cola de mensajes
 	 */
-	public Queue<Mensaje> getMensajes() 
+	public Queue<Mensaje> getMensajes()
 	{
 		return mensajes;
 	}
@@ -109,13 +109,14 @@ public class Buffer
 	}
 
 	/**
-	 * M�todo que guarda un mensaje en el buffer,
+	 * Metodo que guarda un mensaje en el buffer,
 	 * se esta implementando un semaforo
 	 * @param mensaje el mensaje a almacenar
 	 */
 	public void guardarMensaje(Mensaje mensaje)
 	{
-		synchronized(lleno) {
+		synchronized(lleno)
+		{
 			while(mensajes.size() == capacidad)
 			{
 				// Este wait pone en espera al objeto usado en la seccion critica
@@ -131,11 +132,10 @@ public class Buffer
 		}
 		synchronized (vacio)
 		{
-		mensajes.enqueue(mensaje);
+			mensajes.enqueue(mensaje);
 			vacio.notify();
 		}
 		mensaje.dormir();
-
 	}
 
 	/**
@@ -144,7 +144,7 @@ public class Buffer
 	 */
 	public  Mensaje soltarMensaje()
 	{
-		synchronized(vacio) 
+		synchronized(vacio)
 		{
 			while(mensajes.isEmpty())
 			{
@@ -159,10 +159,14 @@ public class Buffer
 			}
 		}
 		Mensaje i;
-		synchronized (this) 
+		synchronized (this)
 		{
 			i = mensajes.dequeue();
-			if(i.getCliente().getConsultas().length == 0) numClientes--;
+			if(i.getCliente().getMensajes().isEmpty())
+			{
+				numClientes--;
+				System.err.println("\nEl cliente: " + i.getCliente().getId() + " no tiene más consultas\n");
+			}
 		}
 		synchronized (lleno)
 		{

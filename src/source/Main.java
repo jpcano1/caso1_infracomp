@@ -7,13 +7,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Collections;
 
+/**
+ * @author Juan Pablo Cano - Andres Gonzalez
+ */
 public class Main
 {
 	private static String archivoDatos = "./data/DatosCaso1.txt";
 	public static Buffer buffer;
-	public static void main(String[] args) throws FileNotFoundException 
+	public static void main(String[] args) throws Exception
 	{
-		try 
+		try
 		{
 			FileReader fr = new FileReader(new File(archivoDatos));
 			BufferedReader br = new BufferedReader(fr);
@@ -21,7 +24,7 @@ public class Main
 			int  numeroClientes = Integer.parseInt(br.readLine().split(":")[1]);
 			Cliente[] clientes = new Cliente[numeroClientes];
 			
-			System.out.println("El número de clientes es: " + numeroClientes);
+			System.out.println("El nï¿½mero de clientes es: " + numeroClientes);
 
 			int numeroServidores = Integer.parseInt(br.readLine().split(":")[1]);
 			Servidor[] servidores = new Servidor[numeroServidores];
@@ -30,7 +33,7 @@ public class Main
 
 			int tamanioBuffer = Integer.parseInt(br.readLine().split(":")[1]);
 			
-			System.out.println("El tamaño del buffer es: " + tamanioBuffer);
+			System.out.println("El tamaï¿½o del buffer es: " + tamanioBuffer);
 			
 			buffer = new Buffer(tamanioBuffer, numeroClientes);
 			
@@ -50,8 +53,8 @@ public class Main
 			while(linea !=null)
 			{	
 				int numeroCliente = Integer.parseInt(linea.split(":")[1]);
-				clientes[numeroCliente-1] = new Cliente((numeroCliente)*1000, Integer.valueOf(linea.split(":")[2]), buffer);
-				System.out.println("El número del cliente creado es:  " + numeroCliente);
+				clientes[numeroCliente-1] = new Cliente((numeroCliente)*1000, Integer.parseInt(linea.split(":")[2]), buffer);
+				System.out.println("El nï¿½mero del cliente creado es:  " + numeroCliente);
 				linea = br.readLine();
 			}
 			

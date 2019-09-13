@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 /**
  * 
- * @author Juan Pablo Cano y Andrés González
+ * @author Juan Pablo Cano y Andrï¿½s Gonzï¿½lez
  *
  */
 public class Queue<T>
@@ -93,8 +93,8 @@ public class Queue<T>
 	}
 	
 	/**
-	 * Este metodo retorna el tamaño de la cola
-	 * @return el tamaño de la cola almacenado en un integer.
+	 * Este metodo retorna el tamaï¿½o de la cola
+	 * @return el tamaï¿½o de la cola almacenado en un integer.
 	 */
 	public int size()
 	{
@@ -103,7 +103,7 @@ public class Queue<T>
 
 	/**
 	 * Este elemento encola elementos en la cola
-	 * @param t el elemento que se encolará
+	 * @param t el elemento que se encolarï¿½
 	 */
 	public void enqueue(T t)
 	{
@@ -111,14 +111,13 @@ public class Queue<T>
 		if(tail == null)
 		{
 			head = tail = nuevo;
-			size++;
 		}
 		else
 		{
 			tail.setNext(nuevo);
 			tail = nuevo;
-			size++;
 		}
+		size++;
 	}
 
 	/**
@@ -127,7 +126,7 @@ public class Queue<T>
 	 */
 	public Iterator<T> iterator()
 	{
-		return new Iterator<T>()
+		return new Iterator<>()
 		{
 			Node<T> actual = head;
 

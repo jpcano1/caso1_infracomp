@@ -12,17 +12,22 @@ public class Cliente extends Thread
 	//-------------------
 	
 	/**
-	 * 
+	 * Identificador del cliente
 	 */
 	private int id;
 
 	/**
-	 * 
+	 * Cola de mensajes del cliente
 	 */
-	private Mensaje[] mensajes;
+	private Queue<Mensaje> mensajes;
 
 	/**
-	 * 
+	 * Numero total de consultas de un cliente
+	 */
+	private int numMensajes;
+
+	/**
+	 * Buffer con el cual el cliente se comunica y envia mensajes
 	 */
 	private Buffer buffer;
 
@@ -31,21 +36,44 @@ public class Cliente extends Thread
 	//-------------------
 	
 	/**
-	 * 
-	 * @param pId
-	 * @param numeroConsultas
-	 * @param pBuffer
+	 * Constructor
+	 * @param pId Id con el que se creara el Cliente
+	 * @param numeroConsultas numero total de consultas
+	 * @param pBuffer buffer de comunicacion
 	 */
 	public Cliente(int pId, int numeroConsultas, Buffer pBuffer)
 	{
 		id = pId;
-		mensajes = new Mensaje[numeroConsultas];
 		buffer = pBuffer;
+		setMensajes(new Queue<Mensaje>());
+		numMensajes = numeroConsultas;
+	}
+
+	//-------------
+	// Metodos
+	//-------------
+
+	/**
+	 * Retorna la cola de mensajes
+	 * @return la cola de mensajes
+	 */
+	public Queue<Mensaje> getMensajes()
+	{
+		return mensajes;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Actualiza la cola de mensajes con una nueva cola.
+	 * @param mensajes La cola nueva
+	 */
+	public void setMensajes(Queue<Mensaje> mensajes)
+	{
+		this.mensajes = mensajes;
+	}
+
+	/**
+	 * Retorna el identificador del cliente
+	 * @return el ID
 	 */
 	public int darId() 
 	{
@@ -53,8 +81,8 @@ public class Cliente extends Thread
 	}
 
 	/**
-	 * 
-	 * @param id
+	 * Actualiza el identificador del cliente
+	 * @param id el id nuevo.
 	 */
 	public void setId(int id)
 	{
@@ -62,35 +90,20 @@ public class Cliente extends Thread
 	}
 
 	/**
-	 * 
-	 * @return
-	 */
-	public Mensaje[] getConsultas()
-	{
-		return mensajes;
-	}
-
-	/**
-	 * 
-	 * @param consultas
-	 */
-	public void setConsultas(Mensaje[] consultas) {
-		this.mensajes = consultas;
-	}
-
-	/**
-	 * 
+	 * Metodo que crea los mensajes y los almacena en la cola
 	 */
 	public void EscribirMensajes()
 	{
-		for (int i = 0; i < mensajes.length; i++) {
-			mensajes[i] = new Mensaje(id+(i+1), this);
+		for(int i = 0; i < numMensajes; i++)
+		{
+			Mensaje aux = new Mensaje(id+(i+1), this);
+			getMensajes().enqueue(aux);
 		}
 	}
 
 	/**
-	 * 
-	 * @param mensaje
+	 * Método que envía el mensaje al servidor a través del buffer
+	 * @param mensaje el mensaje que será envíado
 	 */
 	public void enviarMensaje(Mensaje mensaje)
 	{
@@ -99,15 +112,16 @@ public class Cliente extends Thread
 	}
 
 	/**
-	 * 
+	 * El método run del thread.
 	 */
 	public void run()
 	{
 		EscribirMensajes();
-		for (int i = 0; i < mensajes.length; i++)
+
+		for(int i = 0; i < numMensajes; i++)
 		{
-			enviarMensaje(mensajes[i]);
+			enviarMensaje(getMensajes().dequeue());
 		}
-		System.err.print("acabe Att: " + id );
+		System.err.print("\nAcabe Att: " + id  + "\n");
 	}
 }
