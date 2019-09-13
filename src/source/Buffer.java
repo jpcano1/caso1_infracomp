@@ -109,7 +109,7 @@ public class Buffer
 	}
 
 	/**
-	 * Método que guarda un mensaje en el buffer,
+	 * Mï¿½todo que guarda un mensaje en el buffer,
 	 * se esta implementando un semaforo
 	 * @param mensaje el mensaje a almacenar
 	 */
@@ -125,7 +125,7 @@ public class Buffer
 				}
 				catch (Exception e)
 				{
-					System.out.println("Este es el error: " + (e.getMessage() != null? e.getMessage(): e));
+					System.err.println("Este es el error: " + (e.getMessage() != null? e.getMessage(): e));
 				}
 			}
 		}
@@ -153,7 +153,7 @@ public class Buffer
 				try
 				{
 					vacio.wait();
-				} 
+				}
 				catch (Exception e)
 				{
 					System.out.println("Este es el error: " + (e.getMessage() != null? e.getMessage(): e) + " en el buffer");
@@ -166,7 +166,8 @@ public class Buffer
 			i = mensajes.dequeue();
 			if(i.getCliente().getConsultas().length == 0) numClientes--;
 		}
-		synchronized (lleno) {
+		synchronized (lleno)
+		{
 			lleno.notify();
 		}
 		return i;
