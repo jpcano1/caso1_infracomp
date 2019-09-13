@@ -93,8 +93,8 @@ public class Queue<T>
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Este metodo retorna el tamaño de la cola
+	 * @return el tamaño de la cola almacenado en un integer.
 	 */
 	public int size()
 	{
@@ -102,8 +102,8 @@ public class Queue<T>
 	}
 
 	/**
-	 * 
-	 * @param t
+	 * Este elemento encola elementos en la cola
+	 * @param t el elemento que se encolará
 	 */
 	public void enqueue(T t)
 	{
@@ -122,8 +122,8 @@ public class Queue<T>
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Un iterador simple en la cola
+	 * @return un iterador.
 	 */
 	public Iterator<T> iterator()
 	{
@@ -152,8 +152,8 @@ public class Queue<T>
 	}
 
 	/**
-	 * 
-	 * @return
+	 * El primer elemento de la cola
+	 * @return el tope de la cola
 	 */
 	public T dequeue()
 	{
@@ -164,7 +164,6 @@ public class Queue<T>
 			tail = null;
 		}
 		size--;
-
 		return eliminado.getElement();
 	}
 }

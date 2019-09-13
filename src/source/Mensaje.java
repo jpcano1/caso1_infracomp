@@ -32,26 +32,45 @@ public class Mensaje
 	// Metodos
 	//---------------------
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getMensaje() 
 	{
 		return mensaje;
 	}
 
+	/**
+	 * 
+	 * @param mensaje
+	 */
 	public void setMensaje(int mensaje) 
 	{
 		this.mensaje = mensaje;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public Cliente getCliente() 
 	{
 		return cliente;
 	}
 
+	/**
+	 * 
+	 * @param cliente
+	 */
 	public void setCliente(Cliente cliente) 
 	{
 		this.cliente = cliente;
 	}
 
+	/**
+	 * 
+	 */
 	public void dormir()
 	{
 		try
@@ -64,7 +83,10 @@ public class Mensaje
 			System.err.println("\nEste es el error: " + (e.getMessage() != null? e.getMessage(): e) + "\n y viene del mensaje: " + mensaje);
 		}
 	}
-
+	
+	/**
+	 * 
+	 */
 	public void despertar()
 	{
 		System.out.println("El mensaje: " + mensaje + " despertó");
