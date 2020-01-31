@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.Collections;
 
 /**
- * @author Juan Pablo Cano - Andres Gonzalez
+ * @author Juan Pablo Cano - Nicolas Esteban Cárdenas - Ryan Bosher
  */
 public class Main
 {

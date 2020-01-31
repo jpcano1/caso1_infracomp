@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 /**
  * 
- * @author Juan Pablo Cano y Andr�s Gonz�lez
+ * @author Juan Pablo Cano - Nicolas Esteban Cárdenas - Ryan Bosher
  *
  */
 public class Queue<T>

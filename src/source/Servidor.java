@@ -1,7 +1,7 @@
 package source;
 
 /**
- * @author Juan Pablo Cano - Andres Gonzalez
+ * @author Juan Pablo Cano - Nicolas Esteban Cárdenas - Ryan Bosher
  */
 public class Servidor extends Thread
 {

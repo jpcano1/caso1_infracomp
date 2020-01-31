@@ -2,7 +2,7 @@ package source;
 
 /**
  *
- * @author Juan Pablo Cano y Andres Gonzalez
+ * @author Juan Pablo Cano - Nicolas Esteban Cárdenas - Ryan Bosher
  *
  */
 public class Buffer
