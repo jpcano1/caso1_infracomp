@@ -61,7 +61,11 @@ public class Servidor extends Thread
 	 */
 	public void leerMensaje()
 	{
-		Mensaje leyendo = buffer.soltarMensaje();
+	    while(leyendo == null)
+	    {
+	        leyendo = buffer.soltarMensaje();
+	        yield();
+	    }
 		System.out.println("Mensaje leido: " + leyendo.getMensaje() + " por servidor: " + id);
 		leyendo.setMensaje(leyendo.getMensaje() + 1);
 		System.out.println("Mensaje enviado: " + leyendo.getMensaje() + " por servidor: " + id);

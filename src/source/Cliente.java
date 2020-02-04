@@ -108,7 +108,10 @@ public class Cliente extends Thread
 	public void enviarMensaje(Mensaje mensaje)
 	{
 		System.out.println("Se envio el mensaje: " + mensaje.getMensaje() + " por el cliente: " + id);
-		buffer.guardarMensaje(mensaje);
+		while(!buffer.guardarMensaje(mensaje))
+		{
+		    yield();
+		}
 	}
 
 	/**
