@@ -120,7 +120,7 @@ public class Buffer
 		{
 			if(mensajes.size() == capacidad)
 			{
-				// Este wait pone en espera al objeto usado en la seccion critica
+				System.out.println("No hay espacio para almacenar mensajes");
 				return false;
 			}
 		}
@@ -146,15 +146,16 @@ public class Buffer
 			}
 		}
 		Mensaje i;
-		synchronized (this)
+		synchronized(this)
 		{
 			i = mensajes.dequeue();
 			if(i.getCliente().getMensajes().isEmpty())
 			{
 				numClientes--;
-				System.err.println("\nEl cliente: " + i.getCliente().getId() + " no tiene más consultas\n");
+				System.err.println("\nEl cliente: " + i.getCliente().getId() + " no tiene mas consultas\n");
 			}
 		}
+		System.out.println("Mensaje enviado al servidor");
 		return i;
 	}
 }

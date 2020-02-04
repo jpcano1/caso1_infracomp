@@ -107,11 +107,14 @@ public class Cliente extends Thread
 	 */
 	public void enviarMensaje(Mensaje mensaje)
 	{
-		System.out.println("Se envio el mensaje: " + mensaje.getMensaje() + " por el cliente: " + id);
-		while(!buffer.guardarMensaje(mensaje))
+		boolean permiso = buffer.guardarMensaje(mensaje);
+		while(!permiso)
 		{
+			System.out.println("Intentado guardar mensaje");
+			permiso = buffer.guardarMensaje(mensaje);
 		    yield();
 		}
+		System.out.println("Se envio el mensaje: " + mensaje.getMensaje() + " por el cliente: " + id);
 	}
 
 	/**
