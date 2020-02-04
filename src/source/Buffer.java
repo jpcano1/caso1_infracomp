@@ -108,34 +108,28 @@ public class Buffer
 		this.mensajes = mensajes;
 	}
 
+
 	/**
 	 * Metodo que guarda un mensaje en el buffer,
 	 * se esta implementando un semaforo
 	 * @param mensaje el mensaje a almacenar
 	 */
-	public void guardarMensaje(Mensaje mensaje)
+	public boolean guardarMensaje(Mensaje mensaje)
 	{
 		synchronized(lleno)
 		{
-			while(mensajes.size() == capacidad)
+			if(mensajes.size() == capacidad)
 			{
-				// Este wait pone en espera al objeto usado en la seccion critica
-				try
-				{
-					lleno.wait();
-				}
-				catch (Exception e)
-				{
-					System.err.println("Este es el error: " + (e.getMessage() != null? e.getMessage(): e));
-				}
+				System.out.println("No hay espacio para almacenar mensajes");
+				return false;
 			}
 		}
 		synchronized (vacio)
 		{
 			mensajes.enqueue(mensaje);
-			vacio.notify();
+			mensaje.dormir();
+			return true;
 		}
-		mensaje.dormir();
 	}
 
 	/**
@@ -146,32 +140,22 @@ public class Buffer
 	{
 		synchronized(vacio)
 		{
-			while(mensajes.isEmpty())
+			if(mensajes.isEmpty())
 			{
-				try
-				{
-					vacio.wait();
-				}
-				catch (Exception e)
-				{
-					System.out.println("Este es el error: " + (e.getMessage() != null? e.getMessage(): e) + " en el buffer");
-				}
+				return null;
 			}
 		}
 		Mensaje i;
-		synchronized (this)
+		synchronized(this)
 		{
 			i = mensajes.dequeue();
 			if(i.getCliente().getMensajes().isEmpty())
 			{
 				numClientes--;
-				System.err.println("\nEl cliente: " + i.getCliente().getId() + " no tiene más consultas\n");
+				System.err.println("\nEl cliente: " + i.getCliente().getId() + " no tiene mas consultas\n");
 			}
 		}
-		synchronized (lleno)
-		{
-			lleno.notify();
-		}
+		System.out.println("Mensaje enviado al servidor");
 		return i;
 	}
 }

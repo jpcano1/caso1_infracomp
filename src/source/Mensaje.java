@@ -83,8 +83,8 @@ public class Mensaje
 	{
 		try
 		{
-			System.out.println("\nEl mensaje: " + mensaje + " est� en espera.\n");
 			wait();
+			System.out.println("\nEl mensaje: " + mensaje + " esta en espera.\n");
 		}
 		catch (Exception e)
 		{
@@ -97,7 +97,7 @@ public class Mensaje
 	 */
 	public synchronized void despertar()
 	{
-		System.out.println("\nEl mensaje: " + mensaje + " desperto\n");
 		notify();
+		System.out.println("\nEl mensaje: " + mensaje + " desperto\n");
 	}
 }
