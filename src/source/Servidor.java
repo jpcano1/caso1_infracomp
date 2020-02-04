@@ -61,6 +61,7 @@ public class Servidor extends Thread
 	 */
 	public void leerMensaje()
 	{
+	    Mensaje leyendo = buffer.soltarMensaje();
 	    while(leyendo == null)
 	    {
 	        leyendo = buffer.soltarMensaje();
@@ -77,14 +78,7 @@ public class Servidor extends Thread
 	 */
 	public void run()
 	{
-		while(buffer.getCont() > 0)
-		{
-			if(buffer.getMensajes().isEmpty())
-			{
-				this.yield();
-			}
-			leerMensaje();
-		}
+	    leerMensaje();
 		System.err.println("\nEl servidor: " + id + " termino");
 	}
 }
