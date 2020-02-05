@@ -97,7 +97,7 @@ public class Mensaje
 	 */
 	public synchronized void despertar()
 	{
-		notify();
 		System.out.println("\nEl mensaje: " + mensaje + " desperto\n");
+		notify();
 	}
 }

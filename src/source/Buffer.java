@@ -127,7 +127,7 @@ public class Buffer
 		synchronized (vacio)
 		{
 			mensajes.enqueue(mensaje);
-			mensaje.dormir();
+			System.out.println("Almacenado");
 			return true;
 		}
 	}
@@ -148,11 +148,11 @@ public class Buffer
 		Mensaje i;
 		synchronized(this)
 		{
-			i = mensajes.dequeue();
+			i = mensajes.isEmpty()? null: mensajes.dequeue();
 			if(i.getCliente().getMensajes().isEmpty())
 			{
 				numClientes--;
-				System.err.println("\nEl cliente: " + i.getCliente().getId() + " no tiene mas consultas\n");
+				System.err.println("\nEl cliente: " + i.getCliente().getId() + " no tiene mas consultas");
 			}
 		}
 		System.out.println("Mensaje enviado al servidor");

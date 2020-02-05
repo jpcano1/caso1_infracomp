@@ -61,12 +61,19 @@ public class Servidor extends Thread
 	 */
 	public void leerMensaje()
 	{
-	    Mensaje leyendo = buffer.soltarMensaje();
-	    while(leyendo == null)
-	    {
-	        yield();
-	        leyendo = buffer.soltarMensaje();
-	    }
+		Mensaje leyendo = buffer.soltarMensaje();
+		while(leyendo == null)
+		{
+			yield();
+			if(buffer.getCont() > 0)
+			{
+				leyendo =  buffer.soltarMensaje();
+			}
+			else
+			{
+				return;
+			}
+		}
 		System.out.println("Mensaje leido: " + leyendo.getMensaje() + " por servidor: " + id);
 		leyendo.setMensaje(leyendo.getMensaje() + 1);
 		System.out.println("Mensaje enviado: " + leyendo.getMensaje() + " por servidor: " + id);
@@ -78,8 +85,10 @@ public class Servidor extends Thread
 	 */
 	public void run()
 	{
-	    leerMensaje();
+		while(buffer.getCont() > 0)
+		{
+			leerMensaje();
+		}
 		System.err.println("\nEl servidor: " + id + " termino");
 	}
 }
-
