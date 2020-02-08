@@ -83,8 +83,8 @@ public class Mensaje
 	{
 		try
 		{
-			wait();
 			System.out.println("\nEl mensaje: " + mensaje + " esta en espera.\n");
+			wait();
 		}
 		catch (Exception e)
 		{

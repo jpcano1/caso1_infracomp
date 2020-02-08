@@ -11,7 +11,7 @@ public class Main
 {
 	private static String archivoDatos = "./data/DatosCaso1.txt";
 	public static Buffer buffer;
-	public static void main(String[] args) throws Exception
+	public static void main(String[] args)
 	{
 		try
 		{
@@ -48,13 +48,13 @@ public class Main
 				System.out.println("El numero del cliente creado es:  " + numeroCliente);
 				linea = br.readLine();
 			}
-			
+
 			for(int i = 0; i < numeroClientes; i++)
 			{
 				clientes[i].start();
 				System.out.println("Cliente " + (i+1) + " iniciado.");
 			}
-			
+
 			for(int i = 0; i < numeroServidores; i++)
 			{
 				servidores[i].start();

@@ -62,6 +62,11 @@ public class Cliente extends Thread
 		return mensajes;
 	}
 
+	public int getNumMensajes()
+	{
+		return mensajes.size();
+	}
+
 	/**
 	 * Actualiza la cola de mensajes con una nueva cola.
 	 * @param mensajes La cola nueva
@@ -97,7 +102,7 @@ public class Cliente extends Thread
 		for(int i = 0; i < numMensajes; i++)
 		{
 			Mensaje aux = new Mensaje(id+(i+1), this);
-			getMensajes().enqueue(aux);
+			mensajes.enqueue(aux);
 		}
 	}
 
@@ -107,12 +112,20 @@ public class Cliente extends Thread
 	 */
 	public void enviarMensaje(Mensaje mensaje)
 	{
-		boolean permiso = buffer.guardarMensaje(mensaje);
-		while(!permiso)
+		boolean permiso;
+		while(true)
 		{
-			yield();
 			System.out.println("Intentado guardar mensaje");
 			permiso = buffer.guardarMensaje(mensaje);
+			if(permiso)
+			{
+				System.out.println("Se pueden agregar mensajes");
+				break;
+			}
+			else
+			{
+				Thread.yield();
+			}
 		}
 		System.out.println("Se envio el mensaje: " + mensaje.getMensaje() + " por el cliente: " + id);
 		mensaje.dormir();
@@ -126,7 +139,7 @@ public class Cliente extends Thread
 		EscribirMensajes();
 		for(int i = 0; i < numMensajes; i++)
 		{
-			enviarMensaje(getMensajes().dequeue());
+			enviarMensaje(this.mensajes.dequeue());
 		}
 		System.err.print("\nAcabe Att: " + id  + "\n");
 	}

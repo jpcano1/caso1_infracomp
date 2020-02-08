@@ -54,6 +54,11 @@ public class Buffer
 	// Metodos
 	//---------------------------
 
+	public boolean full()
+	{
+		return mensajes.size() == capacidad;
+	}
+
 	/**
 	 * Obtiene el contador de mensajes
 	 * @return el contador
@@ -116,46 +121,54 @@ public class Buffer
 	 */
 	public boolean guardarMensaje(Mensaje mensaje)
 	{
+		boolean permiso = true;
 		synchronized(lleno)
 		{
 			if(mensajes.size() == capacidad)
 			{
 				System.out.println("No hay espacio para almacenar mensajes");
-				return false;
+				permiso =  false;
 			}
 		}
-		synchronized (vacio)
+		synchronized (this)
 		{
 			mensajes.enqueue(mensaje);
 			System.out.println("Almacenado");
-			return true;
 		}
+		return permiso;
 	}
 
 	/**
 	 * Retorna el primer mensaje de la cola mientras no este vacio
 	 * @return un mensaje que representa el primero de la cola
 	 */
-	public  Mensaje soltarMensaje()
+	public Mensaje soltarMensaje()
 	{
-		synchronized(vacio)
-		{
-			if(mensajes.isEmpty())
-			{
-				return null;
-			}
-		}
-		Mensaje i;
+		Mensaje i = null;
+//		synchronized(vacio)
+//		{
+//			if(mensajes.isEmpty())
+//			{
+//				i = null ;
+//			}
+//		}
 		synchronized(this)
 		{
-			i = mensajes.isEmpty()? null: mensajes.dequeue();
-			if(i.getCliente().getMensajes().isEmpty())
+			if(!mensajes.isEmpty())
 			{
-				numClientes--;
-				System.err.println("\nEl cliente: " + i.getCliente().getId() + " no tiene mas consultas");
+				i = mensajes.dequeue();
+				if(i.getCliente().getNumMensajes() == 0)
+				{
+					numClientes--;
+					System.err.println("El cliente: " + i.getCliente().getId() + " no tiene mas consultas");
+					if(numClientes <= 0)
+					{
+						System.err.println("No hay clientes");
+					}
+				}
+				System.out.println("Mensaje enviado al servidor");
 			}
 		}
-		System.out.println("Mensaje enviado al servidor");
 		return i;
 	}
 }

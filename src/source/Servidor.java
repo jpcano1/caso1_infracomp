@@ -61,23 +61,26 @@ public class Servidor extends Thread
 	 */
 	public void leerMensaje()
 	{
-		Mensaje leyendo = buffer.soltarMensaje();
-		while(leyendo == null)
+		Mensaje leyendo;
+		while(true)
 		{
-			yield();
-			if(buffer.getCont() > 0)
+			leyendo = buffer.soltarMensaje();
+			if(leyendo != null || buffer.getCont() <= 0)
 			{
-				leyendo =  buffer.soltarMensaje();
+				break;
 			}
-			else
+			else if(leyendo == null)
 			{
-				return;
+				Thread.yield();
 			}
 		}
-		System.out.println("Mensaje leido: " + leyendo.getMensaje() + " por servidor: " + id);
-		leyendo.setMensaje(leyendo.getMensaje() + 1);
-		System.out.println("Mensaje enviado: " + leyendo.getMensaje() + " por servidor: " + id);
-		leyendo.despertar();
+		if(leyendo != null)
+		{
+			System.out.println("Mensaje leido: " + leyendo.getMensaje() + " por servidor: " + id);
+			leyendo.setMensaje(leyendo.getMensaje() + 1);
+			System.out.println("Mensaje enviado: " + leyendo.getMensaje() + " por servidor: " + id);
+			leyendo.despertar();
+		}
 	}
 
 	/**
@@ -85,9 +88,17 @@ public class Servidor extends Thread
 	 */
 	public void run()
 	{
-		while(buffer.getCont() > 0)
+		while(true)
 		{
-			leerMensaje();
+			if(buffer.getCont() > 0)
+			{
+				leerMensaje();
+			}
+			else if(buffer.getCont() < 1)
+			{
+				System.out.println("No hay clientes disponibles, reportó: " + id);
+				break;
+			}
 		}
 		System.err.println("\nEl servidor: " + id + " termino");
 	}

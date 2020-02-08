@@ -117,7 +117,7 @@ public class Queue<T>
 			tail.setNext(nuevo);
 			tail = nuevo;
 		}
-		size++;
+		++size;
 	}
 
 	/**
@@ -162,7 +162,7 @@ public class Queue<T>
 		{
 			tail = null;
 		}
-		size--;
+		--size;
 		return eliminado.getElement();
 	}
 }
