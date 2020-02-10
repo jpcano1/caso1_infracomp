@@ -33,8 +33,8 @@ public class Client extends Thread {
         return numMessages;
     }
 
-    public void setNumMessages(int numMensajes) {
-        this.numMessages = numMensajes;
+    public void setNumMessages(int numMessages) {
+        this.numMessages = numMessages;
     }
 
     public int getClientID() {
@@ -55,17 +55,17 @@ public class Client extends Thread {
     public void receiveMessages(Message message) {
         boolean permission;
         while (true) {
-            System.out.println("Saving Message");
+            System.out.println("[C " + getClientID() + "] Saving Message");
             permission = getBuffer().saveMessages(message);
             if (permission) {
-                System.out.println("Messages can be added");
+                System.out.println("[C " + getClientID() + "] Messages can be added");
                 break;
             } else {
                 Thread.yield();
             }
         }
-        System.out.println("The message " + message.getMensaje() + " was sent to client " + getClientID());
-        message.dormir();
+        System.out.println("[C " + getClientID() + "] " + message.getMessage() + " received");
+        message.sleepMessage();
     }
 
     public void run() {
@@ -73,6 +73,6 @@ public class Client extends Thread {
         for (int i = 0; i < getNumMessages(); i++) {
             receiveMessages(getMessageQueue().dequeue());
         }
-        System.err.print("Client " + getClientID() + " Finished.");
+        System.err.println("[C " + getClientID() + "] finished.");
     }
 }

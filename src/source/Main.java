@@ -4,61 +4,54 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
-/**
- * @author Juan Pablo Cano - Nicolas Esteban Cárdenas - Ryan Bosher
- */
 public class Main {
-    public static Buffer buffer;
-    private static String archivoDatos = "./data/DatosCaso1.txt";
 
     public static void main(String[] args) {
         try {
-            FileReader fr = new FileReader(new File(archivoDatos));
-            BufferedReader br = new BufferedReader(fr);
 
-            int numeroClientes = Integer.parseInt(br.readLine().split(":")[1]);
-            Client[] clients = new Client[numeroClientes];
+            final BufferedReader bufferedReader = new BufferedReader(new FileReader(
+                    new File("./data/settings.txt")));
 
-            System.out.println("El numero de clientes es: " + numeroClientes);
+            final int numClients = Integer.parseInt(bufferedReader.readLine().split(":")[1]);
+            final int numServers = Integer.parseInt(bufferedReader.readLine().split(":")[1]);
+            final int bufferSize = Integer.parseInt(bufferedReader.readLine().split(":")[1]);
 
-            int numeroServidores = Integer.parseInt(br.readLine().split(":")[1]);
-            Server[] servidores = new Server[numeroServidores];
+            final Client[] clientArray = new Client[numClients];
+            final Server[] serverArray = new Server[numServers];
 
-            System.out.println("El numero de servidores es: " + numeroServidores);
+            final Buffer buffer = new Buffer(bufferSize, numClients);
 
-            int tamanioBuffer = Integer.parseInt(br.readLine().split(":")[1]);
+            System.out.println("Number of clients :" + numClients);
+            System.out.println("Number of servers :" + numServers);
+            System.out.println("Buffer size       :" + bufferSize + "\n");
 
-            System.out.println("El tamano del buffer es: " + tamanioBuffer);
-
-            buffer = new Buffer(tamanioBuffer, numeroClientes);
-
-            for (int i = 0; i < numeroServidores; i++) {
-                servidores[i] = new Server((i + 1) * 100, buffer);
+            for (int i = 0; i < numServers; i++) {
+                serverArray[i] = new Server((i + 1) * 100, buffer);
             }
 
-            String linea = br.readLine();
+            String readLine = bufferedReader.readLine();
 
-            while (linea != null) {
-                int numeroCliente = Integer.parseInt(linea.split(":")[1]);
-                clients[numeroCliente - 1] = new Client((numeroCliente) * 1000, Integer.parseInt(linea.split(":")[2]), buffer);
-                System.out.println("El numero del cliente creado es:  " + numeroCliente);
-                linea = br.readLine();
+            while (readLine != null) {
+                int clientNumber = Integer.parseInt(readLine.split(":")[1]);
+                clientArray[clientNumber - 1] = new Client((clientNumber) * 1000,
+                        Integer.parseInt(readLine.split(":")[2]), buffer);
+                readLine = bufferedReader.readLine();
             }
 
-            for (int i = 0; i < numeroClientes; i++) {
-                clients[i].start();
-                System.out.println("Cliente " + (i + 1) + " iniciado.");
+            for (int i = 0; i < numClients; i++) {
+                clientArray[i].start();
+                System.out.println("[C " + clientArray[i].getClientID() + "] started");
             }
 
-            for (int i = 0; i < numeroServidores; i++) {
-                servidores[i].start();
-                System.out.println("Server: " + (i + 1) + " iniciado. ");
+            for (int i = 0; i < numServers; i++) {
+                serverArray[i].start();
+                System.out.println("[S " + serverArray[i].getServerID() + " ] started");
+
             }
 
-            br.close();
-            fr.close();
+            bufferedReader.close();
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            System.err.println("An error occurred while attempting to read file: " + e.getMessage());
         }
     }
 }
