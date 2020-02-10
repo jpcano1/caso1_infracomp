@@ -3,166 +3,140 @@ package source;
 import java.util.Iterator;
 
 /**
- * 
  * @author Juan Pablo Cano - Nicolas Esteban Cárdenas - Ryan Bosher
- *
  */
-public class Queue<T>
-{
-	@SuppressWarnings("hiding")
-	public class Node<T>
-	{
-		private Node<T> next;
+public class Queue<T> {
+    //--------------------------------------
+    //Attributes
+    //--------------------------------------
+    private Node<T> head;
+    private Node<T> tail;
+    private int size;
 
-		private T element;
+    //--------------------------------------
+    //Constructors
+    //--------------------------------------
+    public Queue() {
+        head = tail = null;
+        size = 0;
+    }
 
-		public Node(T pElement)
-		{
-			next = null;
-			element = pElement;
-		}
+    /**
+     * @return
+     */
+    public boolean isEmpty() {
+        return size == 0;
+    }
 
-		public Node<T> getNext()
-		{
-			return next;
-		}
+    //--------------------------------------
+    //Methods
+    //--------------------------------------
 
-		public void setNext(Node<T> pNode)
-		{
-			next = pNode;
-		}
+    /**
+     * @return
+     */
+    public Node<T> getHead() {
+        return head;
+    }
 
-		public T getElement()
-		{
-			return element;
-		}
+    /**
+     * @return
+     */
+    public Node<T> getTail() {
+        return tail;
+    }
 
-		public void setElement(T pElement)
-		{
-			element = pElement;
-		}
-	}
+    /**
+     * Este metodo retorna el tama�o de la cola
+     *
+     * @return el tama�o de la cola almacenado en un integer.
+     */
+    public int size() {
+        return size;
+    }
 
-	//--------------------------------------
-	//Attributes
-	//--------------------------------------
-	private Node<T> head;
+    /**
+     * Este elemento encola elementos en la cola
+     *
+     * @param t el elemento que se encolar�
+     */
+    public void enqueue(T t) {
+        Node<T> nuevo = new Node<T>(t);
+        if (tail == null) {
+            head = tail = nuevo;
+        } else {
+            tail.setNext(nuevo);
+            tail = nuevo;
+        }
+        ++size;
+    }
 
-	private Node<T> tail;
+    /**
+     * Un iterador simple en la cola
+     *
+     * @return un iterador simple.
+     */
+    public Iterator<T> iterator() {
+        return new Iterator<T>() {
+            Node<T> actual = head;
 
-	private int size;
+            @Override
+            public boolean hasNext() {
+                return actual != null;
+            }
 
-	//--------------------------------------
-	//Constructors
-	//--------------------------------------
-	public Queue()
-	{
-		head = tail = null;
-		size = 0;
-	}
+            @Override
+            public T next() {
+                if (hasNext()) {
+                    T data = actual.getElement();
+                    actual = actual.getNext();
+                    return data;
+                }
+                return null;
+            }
+        };
+    }
 
-	//--------------------------------------
-	//Methods
-	//--------------------------------------
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public boolean isEmpty()
-	{
-		return size == 0;
-	}
-		
-	/**
-	 * 
-	 * @return
-	 */
-	public Node<T> getHead()
-	{
-		return head;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public Node<T> getTail()
-	{
-		return tail;
-	}
-	
-	/**
-	 * Este metodo retorna el tama�o de la cola
-	 * @return el tama�o de la cola almacenado en un integer.
-	 */
-	public int size()
-	{
-		return size;
-	}
+    /**
+     * El primer elemento de la cola
+     *
+     * @return el tope de la cola
+     */
+    public T dequeue() {
+        Node<T> eliminado = head;
+        head = head.getNext();
+        if (head == null) {
+            tail = null;
+        }
+        --size;
+        return eliminado.getElement();
+    }
 
-	/**
-	 * Este elemento encola elementos en la cola
-	 * @param t el elemento que se encolar�
-	 */
-	public void enqueue(T t)
-	{
-		Node<T> nuevo = new Node<T>(t);
-		if(tail == null)
-		{
-			head = tail = nuevo;
-		}
-		else
-		{
-			tail.setNext(nuevo);
-			tail = nuevo;
-		}
-		++size;
-	}
+    @SuppressWarnings("hiding")
+    public class Node<T> {
+        private Node<T> next;
 
-	/**
-	 * Un iterador simple en la cola
-	 * @return un iterador simple.
-	 */
-	public Iterator<T> iterator()
-	{
-		return new Iterator<T>()
-		{
-			Node<T> actual = head;
+        private T element;
 
-			@Override
-			public boolean hasNext()
-			{
-				return actual != null;
-			}
+        public Node(T pElement) {
+            next = null;
+            element = pElement;
+        }
 
-			@Override
-			public T next() 
-			{
-				if(hasNext())
-				{
-					T data = actual.getElement();
-					actual = actual.getNext();
-					return data;
-				}
-				return null;
-			}
-		};
-	}
+        public Node<T> getNext() {
+            return next;
+        }
 
-	/**
-	 * El primer elemento de la cola
-	 * @return el tope de la cola
-	 */
-	public T dequeue()
-	{
-		Node<T> eliminado = head;
-		head = head.getNext();
-		if(head == null)
-		{
-			tail = null;
-		}
-		--size;
-		return eliminado.getElement();
-	}
+        public void setNext(Node<T> pNode) {
+            next = pNode;
+        }
+
+        public T getElement() {
+            return element;
+        }
+
+        public void setElement(T pElement) {
+            element = pElement;
+        }
+    }
 }

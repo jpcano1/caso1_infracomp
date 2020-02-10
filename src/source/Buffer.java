@@ -1,174 +1,78 @@
 package source;
 
-/**
- *
- * @author Juan Pablo Cano - Nicolas Esteban Cárdenas - Ryan Bosher
- *
- */
-public class Buffer
-{
-	//---------------------------
-	// Atributos
-	//--------------------------
+public class Buffer {
+    private final Object FULL;
+    private int capacity;
+    private Queue<Message> messageQueue;
+    private int numClients;
 
-	/**
-	 * Capacidad de buffer
-	 */
-	private int capacidad;
+    public Buffer(int capacity, int numClients) {
+        setCapacity(capacity);
+        setMessageQueue(new Queue<>());
+        setNumClients(numClients);
 
-	/**
-	 * Lista de mensajes
-	 */
-	private Queue<Mensaje> mensajes;
+        FULL = new Object();
+    }
 
-	/**
-	 * Contador de clientes
-	 */
-	private int numClientes;
+    public boolean isFull() {
+        return getMessageQueue().size() == getCapacity();
+    }
 
-	/**
-	 * Son lo objectos sobre los cuales se implementa el 
-	 * semaforo
-	 */
-	private Object lleno, vacio;
+    public int getNumClients() {
+        return numClients;
+    }
 
-	//--------------------------
-	// Constructores
-	//--------------------------
+    public void setNumClients(int numClients) {
+        this.numClients = numClients;
+    }
 
-	/**
-	 * Clase constructora
-	 * @param pCapacidad capacidad del buffer
-	 * @param pNumeroClientes numero de clientes totales
-	 */
-	public Buffer(int pCapacidad, int pNumeroClientes)
-	{
-		capacidad = pCapacidad;
-		mensajes = new Queue<Mensaje>();
-		numClientes = pNumeroClientes;
-		lleno = new Object();
-		vacio = new Object();
-	}
+    public int getCapacity() {
+        return capacity;
+    }
 
-	//---------------------------
-	// Metodos
-	//---------------------------
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
 
-	public boolean full()
-	{
-		return mensajes.size() == capacidad;
-	}
+    public Queue<Message> getMessageQueue() {
+        return messageQueue;
+    }
 
-	/**
-	 * Obtiene el contador de mensajes
-	 * @return el contador
-	 */
-	public int getCont()
-	{
-		return numClientes;
-	}
+    public void setMessageQueue(Queue<Message> messageQueue) {
+        this.messageQueue = messageQueue;
+    }
 
-	/**
-	 * Actualiza el contador
-	 * @param cont
-	 */
-	public void setCont(int cont)
-	{
-		this.numClientes = cont;
-	}
+    public boolean saveMessages(Message message) {
+        boolean premission = true;
+        synchronized (FULL) {
+            if (isFull()) {
+                System.out.println("Message queue full");
+                premission = false;
+            }
+        }
+        synchronized (this) {
+            getMessageQueue().enqueue(message);
+            System.out.println("Stored");
+        }
+        return premission;
+    }
 
-	/**
-	 * Obtiene la capacidad del buffer
-	 * @return la capacidad
-	 */
-	public int getCapacidad()
-	{
-		return capacidad;
-	}
+    public Message discardMessage() {
+        Message currentMessage = null;
 
-	/**
-	 * Actualiza la capacidad del buffer
-	 * @param capacidad
-	 */
-	public void setCapacidad(int capacidad)
-	{
-		this.capacidad = capacidad;
-	}
-
-	/**
-	 * Obtener la cola de mensajes.
-	 * @return la cola de mensajes
-	 */
-	public Queue<Mensaje> getMensajes()
-	{
-		return mensajes;
-	}
-
-	/**
-	 * Actualiza la cola de mensajes
-	 * @param mensajes la cola de mensajes
-	 */
-	public void setMensajes(Queue<Mensaje> mensajes)
-	{
-		this.mensajes = mensajes;
-	}
-
-
-	/**
-	 * Metodo que guarda un mensaje en el buffer,
-	 * se esta implementando un semaforo
-	 * @param mensaje el mensaje a almacenar
-	 */
-	public boolean guardarMensaje(Mensaje mensaje)
-	{
-		boolean permiso = true;
-		synchronized(lleno)
-		{
-			if(mensajes.size() == capacidad)
-			{
-				System.out.println("No hay espacio para almacenar mensajes");
-				permiso =  false;
-			}
-		}
-		synchronized (this)
-		{
-			mensajes.enqueue(mensaje);
-			System.out.println("Almacenado");
-		}
-		return permiso;
-	}
-
-	/**
-	 * Retorna el primer mensaje de la cola mientras no este vacio
-	 * @return un mensaje que representa el primero de la cola
-	 */
-	public Mensaje soltarMensaje()
-	{
-		Mensaje i = null;
-//		synchronized(vacio)
-//		{
-//			if(mensajes.isEmpty())
-//			{
-//				i = null ;
-//			}
-//		}
-		synchronized(this)
-		{
-			if(!mensajes.isEmpty())
-			{
-				i = mensajes.dequeue();
-				if(i.getCliente().getNumMensajes() == 0)
-				{
-					numClientes--;
-					System.err.println("El cliente: " + i.getCliente().getId() + " no tiene mas consultas");
-					if(numClientes <= 0)
-					{
-						System.err.println("No hay clientes");
-					}
-				}
-				System.out.println("Mensaje enviado al servidor");
-			}
-		}
-		return i;
-	}
+        synchronized (this) {
+            if (!getMessageQueue().isEmpty()) {
+                currentMessage = getMessageQueue().dequeue();
+                if (currentMessage.getClient().getMessageQueue().size() == 0) {
+                    setNumClients(getNumClients() - 1);
+                    System.err.println("Client " + currentMessage.getClient().getId() + " has no more messages");
+                    if (getNumClients() <= 0) {
+                        System.err.println("No Clients!");
+                    }
+                }
+                System.out.println("Message sent to server.");
+            }
+        }
+        return currentMessage;
+    }
 }
