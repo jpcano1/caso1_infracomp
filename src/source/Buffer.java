@@ -52,7 +52,12 @@ public class Buffer {
         }
         synchronized (this) {
             getMessageQueue().enqueue(message);
-            System.out.println("[Buffer] Stored " + getMessageQueue().getHead().getElement().getMessage());
+            System.out.println("[Buffer] Stored [M "
+                    + getMessageQueue()
+                    .getHead()
+                    .getElement()
+                    .getMessage()
+                    + "]");
         }
         return premission;
     }

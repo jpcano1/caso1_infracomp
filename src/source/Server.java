@@ -53,5 +53,9 @@ public class Server extends Thread {
             }
         }
         System.err.println("[S " + getServerID() + " ] finished");
+        if (!this.isInterrupted()) {
+            yield();
+            interrupt();
+        }
     }
 }

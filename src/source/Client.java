@@ -47,7 +47,9 @@ public class Client extends Thread {
 
     public void sendMessages() {
         for (int i = 0; i < getNumMessages(); i++) {
-            Message newMessage = new Message(clientID + (i + 1), this);
+//            Message newMessage = new Message(getClientID() + (i + 1), this);
+            Message newMessage = new Message(getClientID(), this);
+            System.out.println("[M " + newMessage.getMessage() + "] created");
             getMessageQueue().enqueue(newMessage);
         }
     }
@@ -58,7 +60,7 @@ public class Client extends Thread {
             System.out.println("[C " + getClientID() + "] Saving Message");
             permission = getBuffer().saveMessages(message);
             if (permission) {
-                System.out.println("[C " + getClientID() + "] Messages can be added");
+                // System.out.println("[C " + getClientID() + "] Messages can be added");
                 break;
             } else {
                 Thread.yield();
@@ -70,9 +72,14 @@ public class Client extends Thread {
 
     public void run() {
         sendMessages();
+
         for (int i = 0; i < getNumMessages(); i++) {
             receiveMessages(getMessageQueue().dequeue());
         }
         System.err.println("[C " + getClientID() + "] finished.");
+        if (!this.isInterrupted()) {
+            yield();
+            interrupt();
+        }
     }
 }
