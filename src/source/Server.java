@@ -7,8 +7,6 @@ public class Server extends Thread {
     public Server(int serverID, Buffer buffer) {
         setServerID(serverID);
         setBuffer(buffer);
-//        this.serverID = serverID;
-//        this.buffer = buffer;
     }
 
     public Buffer getBuffer() {
@@ -27,33 +25,33 @@ public class Server extends Thread {
         this.serverID = id;
     }
 
-    public void leerMensaje() {
-        Message leyendo;
+    public void readMessage() {
+        Message currentMessage;
         while (true) {
-            leyendo = buffer.discardMessage();
-            if (leyendo != null || buffer.getNumClients() <= 0) {
+            currentMessage = getBuffer().discardMessage();
+            if (currentMessage != null || getBuffer().getNumClients() <= 0) {
                 break;
-            } else if (leyendo == null) {
+            } else {
                 Thread.yield();
             }
         }
-        if (leyendo != null) {
-            System.out.println("Mensaje leido: " + leyendo.getMessage() + " por servidor: " + serverID);
-            leyendo.setMessage(leyendo.getMessage() + 1);
-            System.out.println("Mensaje enviado: " + leyendo.getMessage() + " por servidor: " + serverID);
-            leyendo.wakeMessage();
+        if (currentMessage != null) {
+            System.out.println("[S " + getServerID() + " ] read message [M " + currentMessage.getMessage() + "]");
+            currentMessage.setMessage(currentMessage.getMessage() + 1);
+            System.out.println("[S " + getServerID() + " ] sent message [M " + currentMessage.getMessage() + "]");
+            currentMessage.wakeMessage();
         }
     }
 
     public void run() {
         while (true) {
-            if (buffer.getNumClients() > 0) {
-                leerMensaje();
-            } else if (buffer.getNumClients() < 1) {
-                System.out.println("No hay clientes disponibles, reportó: " + serverID);
+            if (getBuffer().getNumClients() > 0) {
+                readMessage();
+            } else if (getBuffer().getNumClients() < 1) {
+                System.out.println("[S " + getServerID() + " ] has no clients");
                 break;
             }
         }
-        System.err.println("\nEl servidor: " + serverID + " termino");
+        System.err.println("[S " + getServerID() + " ] finished");
     }
 }

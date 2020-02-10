@@ -23,7 +23,8 @@ public class Main {
 
             System.out.println("Number of clients :" + numClients);
             System.out.println("Number of servers :" + numServers);
-            System.out.println("Buffer size       :" + bufferSize + "\n");
+            System.out.println("Buffer size       :" + bufferSize);
+            System.out.println("____________________");
 
             for (int i = 0; i < numServers; i++) {
                 serverArray[i] = new Server((i + 1) * 100, buffer);
