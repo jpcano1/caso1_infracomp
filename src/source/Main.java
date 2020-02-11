@@ -11,6 +11,7 @@ public class Main {
     public synchronized static void threadFinished()
     {
         counter++;
+        System.out.println("Contador de mensajes leídos: " + counter);
     }
 
     public static void main(String[] args) {
@@ -22,6 +23,7 @@ public class Main {
             final int numClients = Integer.parseInt(bufferedReader.readLine().split(":")[1]);
             final int numServers = Integer.parseInt(bufferedReader.readLine().split(":")[1]);
             final int bufferSize = Integer.parseInt(bufferedReader.readLine().split(":")[1]);
+            int messages = 0;
 
             final Client[] clientArray = new Client[numClients];
             final Server[] serverArray = new Server[numServers];
@@ -40,11 +42,14 @@ public class Main {
             String readLine = bufferedReader.readLine();
 
             while (readLine != null) {
+            	messages += Integer.parseInt(readLine.split(":")[2]);
                 int clientNumber = Integer.parseInt(readLine.split(":")[1]);
                 clientArray[clientNumber - 1] = new Client((clientNumber) * 1000,
                         Integer.parseInt(readLine.split(":")[2]), buffer);
                 readLine = bufferedReader.readLine();
             }
+            
+            System.out.println(messages);
 
             for (int i = 0; i < numClients; i++) {
                 clientArray[i].start();
@@ -55,13 +60,6 @@ public class Main {
                 serverArray[i].start();
                 System.out.println("[S " + serverArray[i].getServerID() + " ] started");
             }
-
-            while(counter != (numServers + numClients))
-            {
-                System.out.println("Hasn't finish yet: " + counter);
-            }
-
-            System.out.println("Finished: " + counter);
 
             for(int i = 0; i < numServers; i++)
             {
