@@ -6,6 +6,13 @@ import java.io.FileReader;
 
 public class Main {
 
+    static int counter = 0;
+
+    public synchronized static void threadFinished()
+    {
+        counter++;
+    }
+
     public static void main(String[] args) {
         try {
 
@@ -47,9 +54,14 @@ public class Main {
             for (int i = 0; i < numServers; i++) {
                 serverArray[i].start();
                 System.out.println("[S " + serverArray[i].getServerID() + " ] started");
-
             }
 
+            while(counter != numServers)
+            {
+                System.out.println("Hasn't finish yet: " + counter);
+            }
+
+            System.out.println("Finished: " + counter);
             bufferedReader.close();
         } catch (Exception e) {
             System.err.println("An error occurred while attempting to read file: " + e.getMessage());

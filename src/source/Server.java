@@ -31,7 +31,7 @@ public class Server extends Thread {
             currentMessage = getBuffer().discardMessage();
             if (currentMessage != null || getBuffer().getNumClients() <= 0) {
                 break;
-            } else {
+            } else if(currentMessage == null && getBuffer().getNumClients() > 0){
                 Thread.yield();
             }
         }
@@ -47,12 +47,13 @@ public class Server extends Thread {
         while (true) {
             if (getBuffer().getNumClients() > 0) {
                 readMessage();
-            } else if (getBuffer().getNumClients() < 1) {
+            } else if (getBuffer().getNumClients() <= 0) {
                 System.out.println("[S " + getServerID() + " ] has no clients");
                 break;
             }
         }
         System.err.println("[S " + getServerID() + " ] finished");
+        Main.threadFinished();
         if (!this.isInterrupted()) {
             yield();
             interrupt();

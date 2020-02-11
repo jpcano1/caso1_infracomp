@@ -1,8 +1,9 @@
-NumeroClientes:5
+NumeroClientes:6
 NumeroServidores:5
 TamanioBuffer:2
 ConsultasCliente:1:2
-ConsultasCliente:2:2
-ConsultasCliente:3:2
-ConsultasCliente:4:2
-ConsultasCliente:5:2
+ConsultasCliente:2:3
+ConsultasCliente:3:5
+ConsultasCliente:4:1
+ConsultasCliente:5:7
+ConsultasCliente:6:4

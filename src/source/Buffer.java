@@ -43,11 +43,11 @@ public class Buffer {
     }
 
     public boolean saveMessages(Message message) {
-        boolean premission = true;
+        boolean permission = true;
         synchronized (FULL) {
             if (isFull()) {
                 System.out.println("[Buffer] Message queue full");
-                premission = false;
+                permission = false;
             }
         }
         synchronized (this) {
@@ -59,24 +59,22 @@ public class Buffer {
                     .getMessage()
                     + "]");
         }
-        return premission;
+        return permission;
     }
 
-    public Message discardMessage() {
+    public synchronized Message discardMessage() {
         Message currentMessage = null;
 
-        synchronized (this) {
-            if (!getMessageQueue().isEmpty()) {
-                currentMessage = getMessageQueue().dequeue();
-                if (currentMessage.getClient().getMessageQueue().size() == 0) {
-                    setNumClients(getNumClients() - 1);
-                    System.err.println("[C " + currentMessage.getClient().getClientID() + "] has no more messages");
-                    if (getNumClients() <= 0) {
-                        System.err.println("[Buffer] No Clients!");
-                    }
+        if (!getMessageQueue().isEmpty()) {
+            currentMessage = getMessageQueue().dequeue();
+            if (currentMessage.getClient().getMessageQueue().size() == 0) {
+                setNumClients(getNumClients() - 1);
+                System.err.println("[C " + currentMessage.getClient().getClientID() + "] has no more messages");
+                if (getNumClients() <= 0) {
+                    System.err.println("[Buffer] No Clients!");
                 }
-                System.out.println("[M " + currentMessage.getMessage() + "] sent to server");
             }
+            System.out.println("[M " + currentMessage.getMessage() + "] sent to server");
         }
         return currentMessage;
     }
