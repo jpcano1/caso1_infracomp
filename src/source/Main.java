@@ -56,12 +56,23 @@ public class Main {
                 System.out.println("[S " + serverArray[i].getServerID() + " ] started");
             }
 
-            while(counter != numServers)
+            while(counter != (numServers + numClients))
             {
                 System.out.println("Hasn't finish yet: " + counter);
             }
 
             System.out.println("Finished: " + counter);
+
+            for(int i = 0; i < numServers; i++)
+            {
+                System.out.println("Server: " + i + " - " + serverArray[i].getState());
+            }
+
+            for(int i = 0; i < numClients; i++)
+            {
+                System.out.println("Client: " + i + " - " + clientArray[i].getState());
+            }
+
             bufferedReader.close();
         } catch (Exception e) {
             System.err.println("An error occurred while attempting to read file: " + e.getMessage());
