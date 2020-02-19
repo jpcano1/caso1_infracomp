@@ -76,5 +76,6 @@ public class Client extends Thread {
             receiveMessages(getMessageQueue().dequeue());
         }
         System.err.println("[C " + getClientID() + "] finished.");
+        stop();
     }
 }

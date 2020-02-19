@@ -34,8 +34,6 @@ public class Main {
             {
                 clientArray[i] = new Client((i+1), numMensajes, buffer);
             }
-            
-            System.out.println(messages);
 
             for (int i = 0; i < numClients; i++) {
                 clientArray[i].start();

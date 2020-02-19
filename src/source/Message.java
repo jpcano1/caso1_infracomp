@@ -36,7 +36,7 @@ public class Message {
     }
 
     public synchronized void wakeMessage() {
-    	notify();
+        notify();
         System.out.println("[M " + message + "] woke");
     }
 }
