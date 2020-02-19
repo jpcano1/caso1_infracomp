@@ -76,10 +76,5 @@ public class Client extends Thread {
             receiveMessages(getMessageQueue().dequeue());
         }
         System.err.println("[C " + getClientID() + "] finished.");
-        if (!this.isInterrupted()) {
-            System.out.println("[C " + getClientID() + " ] Executing");
-            yield();
-            interrupt();
-        }
     }
 }

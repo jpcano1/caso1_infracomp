@@ -68,13 +68,14 @@ public class Buffer {
         if (!getMessageQueue().isEmpty()) {
             currentMessage = getMessageQueue().dequeue();
             if (currentMessage.getClient().getMessageQueue().size() == 0) {
-                setNumClients(getNumClients() - 1);
+                numClients--;
                 System.err.println("[C " + currentMessage.getClient().getClientID() + "] has no more messages");
                 if (getNumClients() <= 0) {
                     System.err.println("[Buffer] No Clients!");
                 }
             }
             System.out.println("[M " + currentMessage.getMessage() + "] sent to server");
+            currentMessage.wakeMessage();
         }
         return currentMessage;
     }
