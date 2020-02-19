@@ -1,27 +1,20 @@
 package source;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
+import java.util.Properties;
 
 public class Main {
 
-    static int counter = 0;
-
-    public synchronized static void threadFinished()
-    {
-        counter++;
-    }
-
     public static void main(String[] args) {
         try {
+            FileReader reader = new FileReader("./data/config_file.properties");
+            Properties p = new Properties();
+            p.load(reader);
 
-            final BufferedReader bufferedReader = new BufferedReader(new FileReader(
-                    new File("./data/settings.txt")));
-
-            final int numClients = Integer.parseInt(bufferedReader.readLine().split(":")[1]);
-            final int numServers = Integer.parseInt(bufferedReader.readLine().split(":")[1]);
-            final int bufferSize = Integer.parseInt(bufferedReader.readLine().split(":")[1]);
+            final int numClients = Integer.parseInt(p.getProperty("clientes"));
+            final int numServers = Integer.parseInt(p.getProperty("servidores"));
+            final int bufferSize = Integer.parseInt(p.getProperty("tam_buffer"));
+            final int numMensajes = Integer.parseInt(p.getProperty("mensajes"));
 
             final Client[] clientArray = new Client[numClients];
             final Server[] serverArray = new Server[numServers];
@@ -34,16 +27,12 @@ public class Main {
             System.out.println("____________________");
 
             for (int i = 0; i < numServers; i++) {
-                serverArray[i] = new Server((i + 1) * 100, buffer);
+                serverArray[i] = new Server((i + 1), buffer);
             }
 
-            String readLine = bufferedReader.readLine();
-
-            while (readLine != null) {
-                int clientNumber = Integer.parseInt(readLine.split(":")[1]);
-                clientArray[clientNumber - 1] = new Client((clientNumber) * 1000,
-                        Integer.parseInt(readLine.split(":")[2]), buffer);
-                readLine = bufferedReader.readLine();
+            for(int i = 0; i < numClients; i++)
+            {
+                clientArray[i] = new Client((i+1), numMensajes, buffer);
             }
 
             for (int i = 0; i < numClients; i++) {
@@ -55,27 +44,8 @@ public class Main {
                 serverArray[i].start();
                 System.out.println("[S " + serverArray[i].getServerID() + " ] started");
             }
-
-            while(counter != (numServers + numClients))
-            {
-                System.out.println("Hasn't finish yet: " + counter);
-            }
-
-            System.out.println("Finished: " + counter);
-
-            for(int i = 0; i < numServers; i++)
-            {
-                System.out.println("Server: " + i + " - " + serverArray[i].getState());
-            }
-
-            for(int i = 0; i < numClients; i++)
-            {
-                System.out.println("Client: " + i + " - " + clientArray[i].getState());
-            }
-
-            bufferedReader.close();
         } catch (Exception e) {
-            System.err.println("An error occurred while attempting to read file: " + e.getMessage());
+            System.err.println("An error occurred while attempting to read file: " + e);
         }
     }
 }

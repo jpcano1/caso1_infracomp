@@ -53,11 +53,10 @@ public class Server extends Thread {
             }
         }
         System.err.println("[S " + getServerID() + " ] finished");
-        Main.threadFinished();
         if (!this.isInterrupted()) {
             System.out.println("[S " + getServerID() + " ] Executing");
             yield();
-            interrupt();
+            stop();
         }
     }
 }

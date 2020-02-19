@@ -47,7 +47,6 @@ public class Client extends Thread {
 
     public void sendMessages() {
         for (int i = 0; i < getNumMessages(); i++) {
-//            Message newMessage = new Message(getClientID() + (i + 1), this);
             Message newMessage = new Message(getClientID(), this);
             System.out.println("[M " + newMessage.getMessage() + "] created");
             getMessageQueue().enqueue(newMessage);
@@ -77,7 +76,6 @@ public class Client extends Thread {
             receiveMessages(getMessageQueue().dequeue());
         }
         System.err.println("[C " + getClientID() + "] finished.");
-        Main.threadFinished();
         if (!this.isInterrupted()) {
             System.out.println("[C " + getClientID() + " ] Executing");
             yield();
